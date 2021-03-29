@@ -131,10 +131,12 @@ def get_series(date, name):
         response = requests.get(url)
         if response.status_code == 404:
             return None
-        wb = openpyxl.load_workbook(BytesIO(response.content), data_only=True)
+        wb: openpyxl.Workbook = openpyxl.load_workbook(
+            BytesIO(response.content), data_only=True
+        )
         for sheet_model in wb_model.sheets:
             sheet = wb.worksheets[sheet_model.sheet]
-            _series: List[Tuple[str, str, List]] = []
+            _series: List[Tuple[str, Optional[str], List[Optional[int]]]] = []
             month_values = [
                 c.value
                 for c in sheet[sheet_model.dates_row][
@@ -145,7 +147,7 @@ def get_series(date, name):
             for row in sheet_model.rows:
                 cells = sheet[row.row][sheet_model.from_ : sheet.max_column]
                 assert len(month_values) == len(cells)
-                values: List = [
+                values: List[Optional[int]] = [
                     (int(c.value * 1_000_000) if c.value else None) for c in cells
                 ]
                 _series.append((row.institute, row.category, values))
