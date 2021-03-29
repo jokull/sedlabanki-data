@@ -13,9 +13,15 @@ rm housing.db
 poetry run python main.py
 # hér er hægt að gera git diff til að sjá hvort að housing.db sé breytt eða ekki
 poetry run datasette publish cloudrun housing.db --service=sedlabanki-housing
-# hér er hægt að keyra Mortgages.ipynb til að uppfæra grafið
+# hér er hægt að keyra Notebook.ipynb til að uppfæra grafið
 ```
 
 ![](./graphs/inflation.png)
 
 ![](./graphs/type.png)
+
+Gögn um [þróun verðlags](https://px.hagstofa.is/pxis/pxweb/is/Efnahagur/Efnahagur__visitolur__1_vnv__1_vnv/VIS01000.px)
+
+TODO:
+
+- Sækja verðlagsgögn sjálfvirkt
