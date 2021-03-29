@@ -86,7 +86,9 @@ EXCEL_URLS: Dict[str, Tuple[Workbook, ...]] = {
                     {
                         "from_": 2,
                         "dates_row": 9,
-                        "rows": ({"institute": "other", "row": 27},),
+                        "rows": (
+                            {"institute": "other", "category": "indexed", "row": 27},
+                        ),
                     },
                 ),
             }
