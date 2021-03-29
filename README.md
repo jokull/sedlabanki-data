@@ -11,5 +11,7 @@ Til að smíða grunninn frá … grunni …
 poetry install
 rm housing.db
 poetry run python main.py
-poetry run datasette
+# hér er hægt að gera git diff til að sjá hvort að housing.db sé breytt eða ekki
+poetry run datasette publish cloudrun housing.db --service=sedlabanki-housing
+# hér er hægt að keyra Mortgages.ipynb til að uppfæra grafið
 ```
