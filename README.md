@@ -15,3 +15,7 @@ poetry run python main.py
 poetry run datasette publish cloudrun housing.db --service=sedlabanki-housing
 # hér er hægt að keyra Mortgages.ipynb til að uppfæra grafið
 ```
+
+![](./graphs/inflation.png)
+
+![](./graphs/type.png)
