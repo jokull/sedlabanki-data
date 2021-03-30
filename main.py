@@ -9,17 +9,19 @@ import openpyxl
 import requests
 
 
-DBNAME = "housing.db"
+DBNAME = "credit.db"
 
 
 def create_db(path=DBNAME):
     dbconn = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
 
     create_table_sql = """
-    CREATE TABLE mortgages (
+    CREATE TABLE credit (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date DATE,
         institute VARCHAR,
+        sector VARCHAR,
+        industry VARCHAR,
         category VARCHAR,
         value INTEGER
     );
@@ -44,6 +46,8 @@ class Row(BaseModel):
     institute: str
     category: Optional[str]
     row: int
+    sector: str
+    industry: Optional[str]
 
 
 class Sheet(BaseModel):
@@ -69,9 +73,25 @@ EXCEL_URLS: Dict[str, Tuple[Workbook, ...]] = {
                         "from_": 3,
                         "dates_row": 9,
                         "rows": (
-                            {"institute": "bank", "category": "indexed", "row": 15},
-                            {"institute": "bank", "category": "nonindexed", "row": 18},
-                            {"institute": "bank", "category": "foreign", "row": 21},
+                            {"institute": "bank", "sector": "household", "category": "indexed", "row": 15},
+                            {"institute": "bank", "sector": "household", "category": "nonindexed", "row": 18},
+                            {"institute": "bank", "sector": "household", "category": "foreign", "row": 21},
+                        ),
+                    },
+                    {
+                        "sheet": 2,
+                        "from_": 3,
+                        "dates_row": 9,
+                        "rows": (
+                            {"institute": "bank", "sector": "business", "industry": "agriculture", "row": 13},
+                            {"institute": "bank", "sector": "business", "industry": "fisheries", "row": 14},
+                            {"institute": "bank", "sector": "business", "industry": "manufacturing", "row": 15},
+                            {"institute": "bank", "sector": "business", "industry": "utilities", "row": 19},
+                            {"institute": "bank", "sector": "business", "industry": "construction", "row": 20},
+                            {"institute": "bank", "sector": "business", "industry": "retail", "row": 21},
+                            {"institute": "bank", "sector": "business", "industry": "transport-and-communications", "row": 22},
+                            {"institute": "bank", "sector": "business", "industry": "services", "row": 23},
+                            {"institute": "bank", "sector": "business", "industry": "other", "row": 27},
                         ),
                     },
                 ),
@@ -87,7 +107,7 @@ EXCEL_URLS: Dict[str, Tuple[Workbook, ...]] = {
                         "from_": 2,
                         "dates_row": 9,
                         "rows": (
-                            {"institute": "other", "category": "indexed", "row": 27},
+                            {"institute": "other", "sector": "household", "category": "indexed", "row": 27},
                         ),
                     },
                 ),
@@ -106,10 +126,10 @@ EXCEL_URLS: Dict[str, Tuple[Workbook, ...]] = {
                         "from_": 2,
                         "dates_row": 9,
                         "rows": (
-                            {"institute": "pension", "category": "indexed", "row": 27},
+                            {"institute": "pension", "sector": "household", "category": "indexed", "row": 27},
                             {
                                 "institute": "pension",
-                                "category": "nonindexed",
+                                "sector": "household", "category": "nonindexed",
                                 "row": 28,
                             },
                         ),
@@ -138,7 +158,7 @@ def get_series(date, name):
         )
         for sheet_model in wb_model.sheets:
             sheet = wb.worksheets[sheet_model.sheet]
-            _series: List[Tuple[str, Optional[str], List[Optional[int]]]] = []
+            _series: List[Tuple[Row, List[Optional[int]]]] = []
             month_values = [
                 c.value
                 for c in sheet[sheet_model.dates_row][
@@ -152,7 +172,7 @@ def get_series(date, name):
                 values: List[Optional[int]] = [
                     (int(c.value * 1_000_000) if c.value else None) for c in cells
                 ]
-                _series.append((row.institute, row.category, values))
+                _series.append((row, values))
 
             series.append(
                 (
@@ -190,13 +210,12 @@ def main():
 
         print(name, "-", latest.humanize())
         for month_values, s in series:
-            for institute, category, values in s:
+            for row, values in s:
                 for date, value in zip(month_values, values):
                     dbconn.execute(
-                        "INSERT INTO mortgages(institute, category, value, date) values (?, ?, ?, ?)",
-                        (institute, category, value, date),
+                        "INSERT INTO credit(institute, category, sector, industry, value, date) values (?, ?, ?, ?, ?, ?)",
+                        (row.institute, row.category, row.sector, row.industry, value, date),
                     )
-            print()
             dbconn.commit()
 
 
