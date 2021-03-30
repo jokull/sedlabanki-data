@@ -20,6 +20,8 @@ poetry run datasette publish cloudrun housing.db --service=sedlabanki-housing
 
 ![](./graphs/type.png)
 
+![](./graphs/business.png)
+
 Gögn um [þróun verðlags](https://px.hagstofa.is/pxis/pxweb/is/Efnahagur/Efnahagur__visitolur__1_vnv__1_vnv/VIS01000.px)
 
 TODO:
