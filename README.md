@@ -12,7 +12,8 @@ poetry install
 rm housing.db
 poetry run python main.py
 # hér er hægt að gera git diff til að sjá hvort að housing.db sé breytt eða ekki
-poetry run datasette publish cloudrun housing.db --service=sedlabanki-housing
+poetry run datasette publish cloudrun credit.db \
+  --service=sedlabanki-housing --extra-options="--setting max_returned_rows 10000"
 # hér er hægt að keyra Notebook.ipynb til að uppfæra grafið
 ```
 
