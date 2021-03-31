@@ -27,3 +27,4 @@ Gögn um [þróun verðlags](https://px.hagstofa.is/pxis/pxweb/is/Efnahagur/Efna
 TODO:
 
 - Sækja verðlagsgögn sjálfvirkt
+- Pagination fyrir Datasette (1000 raða limit)
