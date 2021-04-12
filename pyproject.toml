@@ -7,17 +7,17 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
-datasette = "^0.55"
+datasette = "^0.56"
 sqlite-utils = "^3.6"
-ics = "^0.7"
 requests = "^2.25.1"
 pandas = "^1.2.3"
 openpyxl = "^3.0.7"
 pydantic = "^1.8.1"
+arrow = "^1.0.3"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^20.8b1", allow-prereleases = true}
-ipykernel = "^5.5.0"
+ipykernel = "^5.5.3"
 notebook = "^6.3.0"
 matplotlib = "^3.4.0"
 ipython = "^7.22.0"
