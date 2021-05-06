@@ -15,6 +15,7 @@ poetry run python main.py
 poetry run datasette publish cloudrun credit.db \
   --service=sedlabanki-housing --extra-options="--setting max_returned_rows 10000"
 # hér er hægt að keyra Notebook.ipynb til að uppfæra grafið
+poetry run python -m notebook
 ```
 
 ![](./graphs/indexation.png)
